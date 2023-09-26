@@ -16,20 +16,11 @@ df = df[columns_to_keep]
 df['Type'] = 'LOD'
 df['Depot'] = input('Enter depot name: ')
 
-""" # Convert the 'Stowage Position' column to string and then append " Stow Position" to each value
-df['Stowage Position'] = 'Stow Position-0' + df['Stowage Position'].astype(str).str.rstrip('0').str.rstrip('.') """
-
 # Convert the 'Stowage Position' column to string
 df['Stowage Position'] = df['Stowage Position'].astype(str)
 
 # Add "Stow Position-0" followed by the digits
 df['Stowage Position'] = 'Stow Position-0' + df['Stowage Position'].str.zfill(6)
-
-""" # Create a boolean mask for rows where 'LOD Date' is empty and 'Stowage Position' has a value
-mask = (df['LOD Date'] == '') & (df['Stowage Position'].notna())
-
-# Apply the mask to the original DataFrame to keep only the selected rows
-df = df[mask] """
 
 # Prompt the user for a date and time
 input_date_time_str = input("Enter a date and time (e.g., '2023-09-24 12:30:00'): ")
@@ -38,7 +29,6 @@ input_date_time = datetime.strptime(input_date_time_str, '%Y-%m-%d %H:%M:%S')
 # Loop through the dataframe and subtract five minutes from each subsequent row
 for index, row in df.iterrows():
     df.at[index, 'LOD Date'] = input_date_time.strftime('%Y-%m-%d %H:%M:%S')
-    input_date_time -= timedelta(minutes=5) 
 
 # Loop through the dataframe and update 'Consignor Code' based on the condition
 for index, row in df.iterrows():
